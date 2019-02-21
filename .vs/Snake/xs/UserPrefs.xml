@@ -1,0 +1,17 @@
+﻿<Properties StartupConfiguration="{986C893D-B7E6-4747-AD3F-6CCCCF633DE6}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Snake/Board.cs">
+    <Files>
+      <File FileName="Snake/Food.cs" Line="8" Column="9" />
+      <File FileName="Snake/Snake.cs" Line="97" Column="29" />
+      <File FileName="Snake/Program.cs" Line="46" Column="30" />
+      <File FileName="Snake/Board.cs" Line="10" Column="9" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.Snake PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+</Properties>

@@ -71,9 +71,32 @@ namespace Snake
             Console.Write(" ");
             Console.BackgroundColor = ConsoleColor.Black;
         }
+
+
         public bool CheckTailCollision()
         {
             return (this.Tail.Any(k => k.X == this.X && k.Y == this.Y));
+        }
+
+        public bool CheckBoardCollision(Board board)
+        {
+            if (this.X <= 1)
+            {
+                return true;
+            }
+            if (this.X >= board.Lenght)
+            {
+                return true;
+            }
+            if (this.Y <= 1)
+            {
+                return true;
+            }
+            if (this.Y >= board.Height)
+            {
+                return true;
+            }
+            return false;
         }
         public bool Eat(Food food)
         {

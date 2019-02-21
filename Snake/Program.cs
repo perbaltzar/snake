@@ -10,14 +10,18 @@ namespace Snake
         {
             Console.CursorVisible = false;
             Console.ForegroundColor = ConsoleColor.Black;
-            var GameRunning = true;
+           
+            // Creating Sprits for the game
+            var food = new Food();
             var joystick = new Joystick();
             var snake = new Snake(15, 15, 3);
-            KeyDirection direction = KeyDirection.Up;
-            int speed = 30;
-            var food = new Food();
-            bool IsFoodEaten = false;
             var board = new Board(50, 20);
+
+            // Setting start variables
+            int speed = 30;
+            bool IsFoodEaten = false;
+            KeyDirection direction = KeyDirection.Up;
+            var GameRunning = true;
 
             while (GameRunning)
             {
@@ -37,10 +41,17 @@ namespace Snake
                 }
 
                 // Drawing the graphics
+
+
+
                 snake.Draw();
                 food.Draw();
                 board.Draw();
-
+                if (snake.CheckBoardCollision(board))
+                {
+                    GameRunning = false;
+                    break;
+                }
 
                 if (snake.CheckTailCollision())
                 {

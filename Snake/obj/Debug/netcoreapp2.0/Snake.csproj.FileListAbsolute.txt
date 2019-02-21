@@ -9,3 +9,14 @@
 /Users/perbaltzar/snake/Snake/Snake/bin/Debug/netcoreapp2.0/Snake.pdb
 /Users/perbaltzar/snake/Snake/Snake/obj/Debug/netcoreapp2.0/Snake.dll
 /Users/perbaltzar/snake/Snake/Snake/obj/Debug/netcoreapp2.0/Snake.pdb
+/Users/perbaltzar/GitHub/snake/Snake/bin/Debug/netcoreapp2.0/Snake.deps.json
+/Users/perbaltzar/GitHub/snake/Snake/bin/Debug/netcoreapp2.0/Snake.runtimeconfig.json
+/Users/perbaltzar/GitHub/snake/Snake/bin/Debug/netcoreapp2.0/Snake.runtimeconfig.dev.json
+/Users/perbaltzar/GitHub/snake/Snake/bin/Debug/netcoreapp2.0/Snake.dll
+/Users/perbaltzar/GitHub/snake/Snake/bin/Debug/netcoreapp2.0/Snake.pdb
+/Users/perbaltzar/GitHub/snake/Snake/obj/Debug/netcoreapp2.0/Snake.csprojAssemblyReference.cache
+/Users/perbaltzar/GitHub/snake/Snake/obj/Debug/netcoreapp2.0/Snake.csproj.CoreCompileInputs.cache
+/Users/perbaltzar/GitHub/snake/Snake/obj/Debug/netcoreapp2.0/Snake.AssemblyInfoInputs.cache
+/Users/perbaltzar/GitHub/snake/Snake/obj/Debug/netcoreapp2.0/Snake.AssemblyInfo.cs
+/Users/perbaltzar/GitHub/snake/Snake/obj/Debug/netcoreapp2.0/Snake.dll
+/Users/perbaltzar/GitHub/snake/Snake/obj/Debug/netcoreapp2.0/Snake.pdb
