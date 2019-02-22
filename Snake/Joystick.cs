@@ -10,13 +10,29 @@ namespace Snake
             switch (direction)
             {
                 case ConsoleKey.DownArrow:
-                    return KeyDirection.Down;
+                    if (PreviousDirection != KeyDirection.Up)
+                    {
+                        return KeyDirection.Down;
+                    }
+                    break;
                 case ConsoleKey.UpArrow:
-                    return KeyDirection.Up;
+                    if (PreviousDirection != KeyDirection.Down)
+                    {
+                        return KeyDirection.Up;
+                    }
+                    break;
                 case ConsoleKey.LeftArrow:
-                    return KeyDirection.Left;
+                    if (PreviousDirection != KeyDirection.Right)
+                    {
+                        return KeyDirection.Left;
+                    }
+                    break;
                 case ConsoleKey.RightArrow:
-                    return KeyDirection.Right;
+                    if (PreviousDirection != KeyDirection.Left)
+                    {
+                        return KeyDirection.Right;
+                    }
+                    break;
             }
             return PreviousDirection; 
         }

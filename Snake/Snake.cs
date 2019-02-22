@@ -17,7 +17,6 @@ namespace Snake
         {
             this.X = x;
             this.Y = y;
-            //this.Lenght = lenght;
             this.Tail = new List<Point>();
 
             for (var i = 1; i <= lenght; i++)
@@ -36,6 +35,7 @@ namespace Snake
 
             }
             this.Tail.Add(new Point(this.X, this.Y));
+
             switch (direction)
             {
                 case KeyDirection.Up:
@@ -98,6 +98,7 @@ namespace Snake
             }
             return false;
         }
+
         public bool Eat(Food food)
         {
             if (this.X == food.X && this.Y == food.Y)
