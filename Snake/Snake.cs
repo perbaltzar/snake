@@ -21,7 +21,7 @@ namespace Snake
 
             for (var i = 1; i <= lenght; i++)
             {
-                this.Tail.Add(new Point(this.X, this.Y-i));
+                this.Tail.Add(new Point(this.X-i, this.Y));
             }
            
 

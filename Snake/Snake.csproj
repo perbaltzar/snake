@@ -8,5 +8,7 @@
   <ItemGroup>
     <Compile Remove="EmptyClass.cs" />
     <Compile Remove="TailPosition.cs" />
+    <Compile Remove="Apple.cs" />
+    <Compile Remove="AppleKeyDirection.cs" />
   </ItemGroup>
 </Project>

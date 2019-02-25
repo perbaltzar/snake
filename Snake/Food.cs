@@ -6,15 +6,15 @@ namespace Snake
         public int X { get; set; }
         public int Y { get; set; }
 
-        public Food()
+        public Food(int width, int height)
         {
-            MakeFood();
+            MakeFood(width, height);
         }
-        public void MakeFood()
+        public void MakeFood(int width, int height)
         {
             var generator = new Random();
-            this.X = generator.Next(1, 20);
-            this.Y = generator.Next(1, 20);
+            this.X = generator.Next(1, width);
+            this.Y = generator.Next(1, height);
         }
         public void Draw()
         {

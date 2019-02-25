@@ -3,6 +3,8 @@ namespace Snake
 {
     public class Joystick
     {
+
+        //Snake direction
         public KeyDirection SetKeyDirection(KeyDirection PreviousDirection)
         {
             var direction = Console.ReadKey().Key;
@@ -36,5 +38,8 @@ namespace Snake
             }
             return PreviousDirection; 
         }
+
+
+
     }
 }
