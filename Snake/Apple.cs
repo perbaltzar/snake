@@ -1,43 +1,50 @@
 ﻿using System;
 namespace Snake
 {
-    public class Apple
+    public class Apple : Food
     {
-        public int X { get; set; }
-        public int Y { get; set; }
-        public int HowRotten {get; set;}
+        //public int X { get; set; }
+        //public int Y { get; set; }
+        public int HowRotten { get; set; }
+        public int MaxWidth { get; set; }
+        public int MaxHeight { get; set; }
 
-        public Apple()
+        public Apple(int width, int height) : base (width, height)
         {
-            var generator = new Random();
-            this.X = generator.Next(1, 20);
-            this.Y = generator.Next(1, 20);
+            MakeFood(width, height);
+            MaxWidth = width;
+            MaxHeight = height;
         }
-        public void Move(AppleKeyDirection direction)
+        public KeyDirection Move(KeyDirection direction)
         {
             switch (direction)
             {
-                case AppleKeyDirection.W:
-                    this.Y--;
+                case KeyDirection.W:
+                    if (this.Y > 1)
+                    {
+                        this.Y--;
+                    }
                     break;
-                case AppleKeyDirection.S:
-                    this.Y++;
+                case KeyDirection.S:
+                    if (Y < MaxHeight-1)
+                    {
+                        this.Y++;
+                    }
                     break;
-                case AppleKeyDirection.A:
-                    this.X--;
+                case KeyDirection.A:
+                    if (X > 1)
+                    {
+                        this.X--;
+                    }
                     break;
-                case AppleKeyDirection.D:
-                    this.X++;
+                case KeyDirection.D:
+                    if (X < MaxWidth-1)
+                    {
+                        this.X++;
+                    }
                     break;
             }
-        }
-
-        public void Draw()
-        {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(this.X, this.Y);
-            Console.Write("*");
-            Console.ForegroundColor = ConsoleColor.Black;
+            return KeyDirection.None;
         }
     }
 }

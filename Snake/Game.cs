@@ -6,8 +6,10 @@ namespace Snake
     public class Game
     {
         private Snake Snake { get; set; }
+        private Apple Apple { get; set; }
         private Food Food { get; set; }
         private Joystick Joystick { get; set; }
+        //private Joystick AppleJoystick { get; set; }
         private Board Board { get; set; }
 
         private int BoardHeight { get; set;}
@@ -17,13 +19,13 @@ namespace Snake
         private int Speed { get; }
         private bool IsFoodEaten { get; set; }
         private bool GameRunning { get; set; }
+        private bool TwoPlayer { get; set; }
         private KeyDirection Direction { get; set; }
+        private KeyDirection AppleDirection { get; set; }
+        private KeyDirection SnakeDirection { get; set; }
 
 
-
-
-
-        public Game()
+        public Game(bool twoPlayerGame)
         {
             //Setting the size of the board
             this.BoardHeight = 20;
@@ -34,6 +36,7 @@ namespace Snake
             this.Joystick = new Joystick();
             this.Snake = new Snake(5, 10, 3);
             this.Board = new Board(this.BoardWidth, this.BoardHeight);
+            this.Apple = new Apple(this.BoardWidth, this.BoardHeight);
 
             // Changing colors and hiding cursor
             Console.CursorVisible = false;
@@ -46,6 +49,9 @@ namespace Snake
             this.IsFoodEaten = false;
             this.Direction = KeyDirection.Right;
             this.GameRunning = true;
+            this.AppleDirection = KeyDirection.None;
+            this.SnakeDirection = KeyDirection.Right;
+            this.TwoPlayer = twoPlayerGame;
 
 
         }
@@ -89,30 +95,64 @@ namespace Snake
                 // Getting movement direction
                 if (Console.KeyAvailable)
                 {
-                    Direction = Joystick.SetKeyDirection(Direction);
+                    Direction = Joystick.SetKeyDirection(SnakeDirection);
+                    if (Direction == KeyDirection.Up || Direction == KeyDirection.Down || Direction == KeyDirection.Left || Direction == KeyDirection.Right)
+                    {
+                        SnakeDirection = Direction;
+                    }
+                    else
+                    {
+                        AppleDirection = Direction;
+                    }
+                }
+                if (TwoPlayer)
+                {
+                    IsFoodEaten = Snake.Eat(Apple);
+                }
+                else
+                {
+                    IsFoodEaten = Snake.Eat(Food);
                 }
 
-
-                IsFoodEaten = Snake.Eat(Food);
-                Snake.Move(Direction, IsFoodEaten);
+                Snake.Move(SnakeDirection, IsFoodEaten);
+                AppleDirection = Apple.Move(AppleDirection);
+               
 
                 if (IsFoodEaten)
                 {
                     Score++;
-                    Food.MakeFood(BoardWidth, BoardHeight);
+                    if (TwoPlayer)
+                    {
+                        Apple.MakeFood(BoardWidth, BoardHeight);
+                    }
+                    else
+                    {
+                        Food.MakeFood(BoardWidth, BoardHeight);
+                    }
+
                 }
 
 
                 // Drawing the graphics
                 Snake.Draw();
-                Food.Draw();
                 Board.Draw();
                 ShowScore(Score);
 
+                if (TwoPlayer)
+                {
+                    Apple.Draw();
+                }
+                else
+                {
+                    Food.Draw();
+                }
 
 
 
-                Thread.Sleep(120 - Speed);
+
+
+
+                Thread.Sleep(100 - Speed);
                 Console.Clear();
             }
         }

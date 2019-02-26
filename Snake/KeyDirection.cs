@@ -6,6 +6,11 @@ namespace Snake
         Up,
         Down,
         Left,
-        Right
+        Right,
+        None,
+        W,
+        A,
+        S,
+        D
     }
 }

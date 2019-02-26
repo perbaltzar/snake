@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Threading;
+
 namespace Snake
 {
     public class Joystick
@@ -7,7 +9,10 @@ namespace Snake
         //Snake direction
         public KeyDirection SetKeyDirection(KeyDirection PreviousDirection)
         {
+
             var direction = Console.ReadKey().Key;
+
+            Thread.Sleep(10);
 
             switch (direction)
             {
@@ -35,6 +40,19 @@ namespace Snake
                         return KeyDirection.Right;
                     }
                     break;
+
+                case ConsoleKey.W:
+                    return KeyDirection.W;
+
+                case ConsoleKey.S:
+                    return KeyDirection.S;
+
+                case ConsoleKey.A:
+                    return KeyDirection.A;
+                  
+                case ConsoleKey.D:
+                    return KeyDirection.D;
+                   
             }
             return PreviousDirection; 
         }

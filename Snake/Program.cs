@@ -10,12 +10,13 @@ namespace Snake
         {
             // This is what i Want it to look like. 
             bool runGame = true;
-            //var game = new Game();
+            bool TwoPlayerGame;
 
             while (runGame)
             {
-                  ShowStartScreen();
-                  var game = new Game();
+                  TwoPlayerGame = ShowStartScreen();
+                  // Set true for two player game
+                  var game = new Game(TwoPlayerGame);
                   game.Countdown();
                   game.Run();
             }
@@ -28,8 +29,9 @@ namespace Snake
        
 
 
-        static public void ShowStartScreen()
+        static public bool ShowStartScreen()
         {
+            bool TwoPlayerGame = false;
             Console.ForegroundColor = ConsoleColor.Green;
 
             Console.WriteLine("   ▄████████ ███▄▄▄▄      ▄████████    ▄█   ▄█▄    ▄████████ ");
@@ -42,8 +44,35 @@ namespace Snake
             Console.WriteLine(" ▄████████▀   ▀█   █▀    ███    █▀    ███   ▀█▀   ██████████ ");
             Console.WriteLine("                                      ▀                      ");
             Console.SetCursorPosition(25, 12);
-            Console.WriteLine("Press any key!");
-            Console.ReadKey();
+            Console.WriteLine("> 1 Player");
+            Console.SetCursorPosition(27, 14);
+            Console.WriteLine("2 Player");
+            while (true)
+            {
+                var key = Console.ReadKey().Key;
+                if (key == ConsoleKey.DownArrow)
+                {
+                    TwoPlayerGame = true;
+                    Console.SetCursorPosition(25, 12);
+                    Console.WriteLine("  1 Player");
+                    Console.SetCursorPosition(25, 14);
+                    Console.WriteLine("> 2 Player");
+                }
+                if (key == ConsoleKey.UpArrow)
+                {
+                    TwoPlayerGame = false;
+                    Console.SetCursorPosition(25, 12);
+                    Console.WriteLine("> 1 Player");
+                    Console.SetCursorPosition(25, 14);
+                    Console.WriteLine("  2 Player");
+                }
+                if (key == ConsoleKey.Enter)
+                {
+                    break;
+                }
+            }
+
+            return TwoPlayerGame;
 
         }
     }
