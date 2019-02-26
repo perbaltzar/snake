@@ -8,7 +8,7 @@ namespace Snake
 
         static void Main(string[] args)
         {
-            // This is what i Want it to look like. 
+
             bool runGame = true;
             bool TwoPlayerGame;
 
@@ -19,11 +19,12 @@ namespace Snake
                   var game = new Game(TwoPlayerGame);
                   game.Countdown();
                   game.Run();
+                  //runGame = game.GameOver();
             }
 
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("GAME OVER");
-            //ShowScore(score);
+
 
         }
        
