@@ -12,8 +12,8 @@ Open in any C# software, I use Visual Studio.
 * Add a Game Over screen
 
 ### CO-CREATORS
-[Isac Larsson](https://github.com/WebDevIsac)
-[Nils Nathorst-Windahl](https://github.com/NilsNathorst)
+* [Isac Larsson](https://github.com/WebDevIsac)
+* [Nils Nathorst-Windahl](https://github.com/NilsNathorst)
 
 ### CO-PROGRAMMERS
 [Isac Larsson](https://github.com/WebDevIsac)
