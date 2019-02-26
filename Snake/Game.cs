@@ -5,20 +5,29 @@ namespace Snake
 {
     public class Game
     {
+        //--------------------------------------------
+        // 
+        //--------------------------------------------
         private Snake Snake { get; set; }
         private Apple Apple { get; set; }
         private Food Food { get; set; }
         private Joystick Joystick { get; set; }
-        //private Joystick AppleJoystick { get; set; }
         private Board Board { get; set; }
+        private Energy Energybar { get; set; }
 
         private int BoardHeight { get; set;}
         private int BoardWidth { get; set; }
+
+
+        private int Energy { get; set; }
+        private int SnakeEnergy { get; set; }
+
 
         private int Score { get; set; }
         private int Speed { get; }
         private bool IsFoodEaten { get; set; }
         private bool GameRunning { get; set; }
+        private string Winner { get; set; }
         private bool TwoPlayer { get; set; }
         private KeyDirection Direction { get; set; }
         private KeyDirection AppleDirection { get; set; }
@@ -27,23 +36,32 @@ namespace Snake
 
         public Game(bool twoPlayerGame)
         {
+            //--------------------------------------------
             //Setting the size of the board
+            //--------------------------------------------
             this.BoardHeight = 20;
             this.BoardWidth = 60;
 
+            //--------------------------------------------
             // Creating Sprites for the game
+            //--------------------------------------------
             this.Food = new Food(this.BoardWidth, this.BoardHeight);
             this.Joystick = new Joystick();
             this.Snake = new Snake(5, 10, 3);
             this.Board = new Board(this.BoardWidth, this.BoardHeight);
             this.Apple = new Apple(this.BoardWidth, this.BoardHeight);
+            this.Energybar = new Energy();
 
+            //--------------------------------------------
             // Changing colors and hiding cursor
+            //--------------------------------------------
             Console.CursorVisible = false;
             Console.BackgroundColor = ConsoleColor.Black;
             Console.ForegroundColor = ConsoleColor.Black;
 
+            //--------------------------------------------
             // Setting startvariables
+            //--------------------------------------------
             this.Score = 0;
             this.Speed = 5;
             this.IsFoodEaten = false;
@@ -81,7 +99,9 @@ namespace Snake
         {
             while (GameRunning)
             {
+                //--------------------------------------------
                 // Check for collision with tail and board
+                //--------------------------------------------
                 if (Snake.CheckBoardCollision(Board))
                 {
                     GameRunning = false;
@@ -92,7 +112,9 @@ namespace Snake
                     GameRunning = false;
                     break;
                 }
+                //--------------------------------------------
                 // Getting movement direction
+                //--------------------------------------------
                 if (Console.KeyAvailable)
                 {
                     Direction = Joystick.SetKeyDirection(SnakeDirection);
@@ -107,7 +129,9 @@ namespace Snake
                 }
                 if (TwoPlayer)
                 {
+                    SnakeEnergy = Snake.GetEnergy();
                     IsFoodEaten = Snake.Eat(Apple);
+
                 }
                 else
                 {
@@ -124,6 +148,9 @@ namespace Snake
                     if (TwoPlayer)
                     {
                         Apple.MakeFood(BoardWidth, BoardHeight);
+                        Energy = Apple.GetEnergy();
+                        Snake.GetEnergyFromApple(Energy);
+
                     }
                     else
                     {
@@ -132,14 +159,21 @@ namespace Snake
 
                 }
 
-
+                //--------------------------------------------
                 // Drawing the graphics
+                //--------------------------------------------
                 Snake.Draw();
                 Board.Draw();
-                ShowScore(Score);
+                ShowScore(Score, BoardHeight);
 
+                //--------------------------------------------
+                // 
+                //--------------------------------------------
                 if (TwoPlayer)
                 {
+                    Apple.RottTheApple();
+                    Energybar.Draw(BoardHeight, SnakeEnergy);
+                    Snake.LoseEnergy();
                     Apple.Draw();
                 }
                 else
@@ -149,17 +183,24 @@ namespace Snake
 
 
 
+                if (SnakeEnergy < 1)
+                {
+                    this.Winner = "Apple";
+                    break;
+                }
 
-
-
+                //--------------------------------------------
+                // Timer for loop
+                //--------------------------------------------
                 Thread.Sleep(100 - Speed);
                 Console.Clear();
             }
+            Console.WriteLine($"Winner: {this.Winner}");
         }
-        static public void ShowScore(int score)
+        static public void ShowScore(int score, int height)
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.SetCursorPosition(10, 30);
+            Console.SetCursorPosition(35, height+2);
             Console.Write($"Points: {score}");
             Console.ForegroundColor = ConsoleColor.Black;
         }

@@ -5,8 +5,10 @@ namespace Snake
 {
     public class Joystick
     {
-
-        //Snake direction
+        //--------------------------------------------
+        // Reading the Keys for direction
+        // Same used in One and Two Player mode
+        //--------------------------------------------
         public KeyDirection SetKeyDirection(KeyDirection PreviousDirection)
         {
 

@@ -1,12 +1,11 @@
 ﻿<Properties StartupConfiguration="{986C893D-B7E6-4747-AD3F-6CCCCF633DE6}|Default">
-  <MonoDevelop.Ide.Workbench ActiveDocument="Snake/Program.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Snake/Game.cs">
     <Files>
-      <File FileName="Snake/Game.cs" Line="55" Column="44" />
-      <File FileName="Snake/Joystick.cs" Line="40" Column="49" />
-      <File FileName="Snake/KeyDirection.cs" Line="10" Column="14" />
-      <File FileName="Snake/Food.cs" Line="25" Column="10" />
-      <File FileName="Snake/Apple.cs" Line="23" Column="37" />
-      <File FileName="Snake/Program.cs" Line="18" Column="17" />
+      <File FileName="Snake/Game.cs" Line="194" Column="46" />
+      <File FileName="Snake/Apple.cs" Line="77" Column="31" />
+      <File FileName="Snake/Program.cs" Line="22" Column="47" />
+      <File FileName="Snake/Snake.cs" Line="22" Column="18" />
+      <File FileName="Snake/Energy.cs" Line="17" Column="37" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.ItemProperties.Snake PreferredExecutionTarget="MonoDevelop.Default" />

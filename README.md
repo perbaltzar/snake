@@ -8,7 +8,6 @@ Clone or download the repo using this [link](https://github.com/perbaltzar/snake
 Open in any C# software, I use Visual Studio. 
 
 ### TO DO
-* Add hunger timer for the snake in two player mode
 * Add a Game Over screen
 
 ### CO-CREATORS
