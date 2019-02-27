@@ -6,7 +6,6 @@ namespace Snake
         public int X { get; set; }
         public int Y { get; set; }
 
-
         public Food(int width, int height)
         {
             MakeFood(width, height);
@@ -29,7 +28,7 @@ namespace Snake
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.SetCursorPosition(this.X, this.Y);
-            Console.Write("*");
+            Console.Write("");
             Console.ForegroundColor = ConsoleColor.Black;
         }
     }

@@ -14,14 +14,13 @@ namespace Snake
 
             while (runGame)
             {
-                  TwoPlayerGame = ShowStartScreen();
+                  TwoPlayerGame = ShowStartScreenAndChoosePlayers();
                   // Set true for two player game
                   var game = new Game(TwoPlayerGame);
                   game.Countdown();
-                  game.Run();
-                  //runGame = game.GameOver();
+                game.Run();
             }
-
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("GAME OVER");
 
@@ -30,7 +29,7 @@ namespace Snake
        
 
 
-        static public bool ShowStartScreen()
+        static public bool ShowStartScreenAndChoosePlayers()
         {
             bool TwoPlayerGame = false;
             Console.ForegroundColor = ConsoleColor.Green;

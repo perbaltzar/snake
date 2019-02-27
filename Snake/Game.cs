@@ -95,7 +95,7 @@ namespace Snake
         }
 
 
-        public void Run() 
+        public bool Run() 
         {
             while (GameRunning)
             {
@@ -105,11 +105,13 @@ namespace Snake
                 if (Snake.CheckBoardCollision(Board))
                 {
                     GameRunning = false;
+                    this.Winner = "Apple";
                     break;
                 }
                 if (Snake.CheckTailCollision())
                 {
                     GameRunning = false;
+                    this.Winner = "Apple";
                     break;
                 }
                 //--------------------------------------------
@@ -144,6 +146,7 @@ namespace Snake
 
                 if (IsFoodEaten)
                 {
+                    Apple.LoseLife();
                     Score++;
                     if (TwoPlayer)
                     {
@@ -164,7 +167,7 @@ namespace Snake
                 //--------------------------------------------
                 Snake.Draw();
                 Board.Draw();
-                ShowScore(Score, BoardHeight);
+
 
                 //--------------------------------------------
                 // 
@@ -175,18 +178,30 @@ namespace Snake
                     Energybar.Draw(BoardHeight, SnakeEnergy);
                     Snake.LoseEnergy();
                     Apple.Draw();
+                    Apple.DrawLifes(BoardHeight);
                 }
                 else
                 {
                     Food.Draw();
+                    ShowScore(Score, BoardHeight);
                 }
 
 
 
-                if (SnakeEnergy < 1)
+                if (SnakeEnergy < 1 && TwoPlayer)
                 {
+                    // Show winning screen and ask if you want to play again
+                    // True resets the game, false go back to title screen
+                    // ShowWinner(Winner);
+                    // bool PlayAgain = PlayAgain();
+                    this.GameRunning = false;
                     this.Winner = "Apple";
-                    break;
+
+                }
+                if (Apple.GetLifes() < 1 && TwoPlayer)
+                {
+                    this.GameRunning = false;
+                    this.Winner = "Snake";
                 }
 
                 //--------------------------------------------
@@ -194,8 +209,14 @@ namespace Snake
                 //--------------------------------------------
                 Thread.Sleep(100 - Speed);
                 Console.Clear();
+
             }
-            Console.WriteLine($"Winner: {this.Winner}");
+            Console.ForegroundColor = ConsoleColor.White;
+            GameOver(this.Winner);
+            Console.ReadKey();
+            Console.Clear();
+
+            return true;
         }
         static public void ShowScore(int score, int height)
         {
@@ -284,6 +305,18 @@ namespace Snake
                     break;
             }
             Thread.Sleep(1000);
+        }
+        public void GameOver(string winner)
+        {
+            Console.WriteLine(" ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ ");
+            Console.WriteLine("██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗");
+            Console.WriteLine("██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗  ██████╔╝");
+            Console.WriteLine("██║   ██║██╔══██║██║╚██╔╝██║██╔══╝      ██║   ██║╚██╗ ██╔╝██╔══╝  ██╔══██╗");
+            Console.WriteLine("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║");
+            Console.WriteLine(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝");
+            Console.WriteLine("");
+            Console.WriteLine($"{winner} has won the game!");
+            Console.ReadKey();
         }
     }
 }

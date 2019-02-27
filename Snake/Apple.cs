@@ -9,6 +9,7 @@ namespace Snake
         public int Rotten { get; set; }
         public int MaxWidth { get; set; }
         public int MaxHeight { get; set; }
+        public int Lifes { get; set; } = 20;
 
         public Apple(int width, int height) : base(width, height)
         {
@@ -68,13 +69,39 @@ namespace Snake
         }
 
         //--------------------------------------------
-        // Return the apple inclues
+        // Return the apple's energuy
         //--------------------------------------------
         public int GetEnergy()
         {
             var energyLeft = 90 - Rotten;
             this.Rotten = 0;
             return energyLeft;
+
+        }
+        //--------------------------------------------
+        // Return the apple's lives
+        //--------------------------------------------
+        public int GetLifes()
+        {
+            return this.Lifes;
+        }
+
+        public void LoseLife()
+        {
+            this.Lifes--;
+        }
+        public void DrawLifes(int height)
+        {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.SetCursorPosition(3, height + 3);
+            Console.Write("Apple: ");
+            for (int i = 0; i < this.Lifes; i++)
+            {
+               
+                    Console.SetCursorPosition(13+i, height + 3);
+                    Console.Write("");
+            }
+            Console.ForegroundColor = ConsoleColor.Black;
         }
     }
 }

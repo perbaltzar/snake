@@ -10,15 +10,15 @@ namespace Snake
         {
             Console.ForegroundColor = ConsoleColor.White;
             Console.SetCursorPosition(3, height + 2);
-            Console.WriteLine("0%|                    |100%");
-            Console.SetCursorPosition(6, height + 2);
+            Console.WriteLine("Snake: 0%|                    |100%");
+            Console.SetCursorPosition(13, height + 2);
 
 
             int NoOfBars = (energy/5);
             Console.BackgroundColor = ConsoleColor.Green;
             for (int i = 0; i < NoOfBars; i++)
             {
-                Console.SetCursorPosition(6+i, height + 2);
+                Console.SetCursorPosition(13+i, height + 2);
                 Console.Write(" ");
             }
             Console.ForegroundColor = ConsoleColor.Black;
