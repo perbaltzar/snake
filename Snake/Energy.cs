@@ -14,7 +14,7 @@ namespace Snake
             Console.SetCursorPosition(13, height + 2);
 
 
-            int NoOfBars = (energy/5);
+            int NoOfBars = (energy/(150/20));
             Console.BackgroundColor = ConsoleColor.Green;
             for (int i = 0; i < NoOfBars; i++)
             {

@@ -6,10 +6,10 @@ namespace Snake
         //--------------------------------------------
         // Additional variables for the Playable Apple
         //--------------------------------------------
-        public int Rotten { get; set; }
-        public int MaxWidth { get; set; }
-        public int MaxHeight { get; set; }
-        public int Lifes { get; set; } = 20;
+        private int Rotten { get; set; }
+        private int MaxWidth { get; }
+        private int MaxHeight { get; }
+        private int Lifes { get; set; } = 20;
 
         public Apple(int width, int height) : base(width, height)
         {
@@ -58,6 +58,14 @@ namespace Snake
                     break;
             }
             return KeyDirection.None;
+        }
+        //--------------------------------------------
+        // UnDraw the apple
+        //--------------------------------------------
+        public void EraseOldApple()
+        {
+            Console.SetCursorPosition(this.X, this.Y);
+            Console.Write(" ");
         }
 
         //--------------------------------------------

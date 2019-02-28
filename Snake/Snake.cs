@@ -10,8 +10,8 @@ namespace Snake
         private int X { get; set; }
         private int Y { get; set; }
         private int Energy { get; set; }
-        public int Lenght { get; set; }
-        public List<Point> Tail { get; set; }
+        private int Lenght { get; set; }
+        private List<Point> Tail { get; }
 
 
         public Snake(int x, int y, int lenght)
@@ -19,7 +19,7 @@ namespace Snake
             this.X = x;
             this.Y = y;
             this.Tail = new List<Point>();
-            this.Energy = 100;
+            this.Energy = 150;
 
             for (var i = 1; i <= lenght; i++)
             {
@@ -31,6 +31,11 @@ namespace Snake
         {
             if (!IsFoodEaten)
             {
+                var EndTailX = this.Tail.ElementAt(0).X;
+                var EndTailY = this.Tail.ElementAt(0).Y;
+                Console.SetCursorPosition(EndTailX, EndTailY);
+                //Console.BackgroundColor = ConsoleColor.Black;
+                Console.Write(" ");
                 this.Tail.RemoveAt(0);
 
             }
@@ -128,9 +133,9 @@ namespace Snake
         public void GetEnergyFromApple(int energy)
         {
             this.Energy += energy;
-            if (this.Energy > 100)
+            if (this.Energy > 150)
             {
-                this.Energy = 100;
+                this.Energy = 150;
             }
         }
         //--------------------------------------------

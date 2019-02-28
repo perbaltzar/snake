@@ -140,6 +140,7 @@ namespace Snake
                     IsFoodEaten = Snake.Eat(Food);
                 }
 
+                Apple.EraseOldApple();
                 Snake.Move(SnakeDirection, IsFoodEaten);
                 AppleDirection = Apple.Move(AppleDirection);
                
@@ -163,14 +164,14 @@ namespace Snake
                 }
 
                 //--------------------------------------------
-                // Drawing the graphics
+                // Drawing the graphics in both modes
                 //--------------------------------------------
                 Snake.Draw();
                 Board.Draw();
 
 
                 //--------------------------------------------
-                // 
+                // Drawing different for Two vs One Player mode
                 //--------------------------------------------
                 if (TwoPlayer)
                 {
@@ -208,12 +209,13 @@ namespace Snake
                 // Timer for loop
                 //--------------------------------------------
                 Thread.Sleep(100 - Speed);
-                Console.Clear();
+
+                //Console.Clear();
 
             }
+            Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
             GameOver(this.Winner);
-            Console.ReadKey();
             Console.Clear();
 
             return true;
@@ -308,6 +310,7 @@ namespace Snake
         }
         public void GameOver(string winner)
         {
+
             Console.WriteLine(" ██████╗  █████╗ ███╗   ███╗███████╗     ██████╗ ██╗   ██╗███████╗██████╗ ");
             Console.WriteLine("██╔════╝ ██╔══██╗████╗ ████║██╔════╝    ██╔═══██╗██║   ██║██╔════╝██╔══██╗");
             Console.WriteLine("██║  ███╗███████║██╔████╔██║█████╗      ██║   ██║██║   ██║█████╗  ██████╔╝");
@@ -315,8 +318,19 @@ namespace Snake
             Console.WriteLine("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║");
             Console.WriteLine(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝");
             Console.WriteLine("");
+            Console.SetCursorPosition(24, 7);
             Console.WriteLine($"{winner} has won the game!");
-            Console.ReadKey();
+            Console.WriteLine("");
+            Console.SetCursorPosition(24, 11);
+            Console.WriteLine("Press Enter to continue!");
+            while (true)
+            {
+                var key = Console.ReadKey().Key;
+                if (key == ConsoleKey.Enter)
+                {
+                    break;
+                }
+            }
         }
     }
 }
