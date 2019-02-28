@@ -64,8 +64,11 @@ namespace Snake
         //--------------------------------------------
         public void EraseOldApple()
         {
-            Console.SetCursorPosition(this.X, this.Y);
-            Console.Write(" ");
+            lock (Program.WriteLock)
+            {
+                Console.SetCursorPosition(this.X, this.Y);
+                Console.Write(" ");
+            }
         }
 
         //--------------------------------------------
@@ -100,16 +103,19 @@ namespace Snake
         }
         public void DrawLifes(int height)
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(3, height + 3);
-            Console.Write("Apple: ");
-            for (int i = 0; i < this.Lifes; i++)
+            lock (Program.WriteLock)
             {
-               
-                    Console.SetCursorPosition(13+i, height + 3);
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.SetCursorPosition(3, height + 3);
+                Console.Write("Apple: ");
+                for (int i = 0; i < this.Lifes; i++)
+                {
+
+                    Console.SetCursorPosition(13 + i, height + 3);
                     Console.Write("");
+                }
+                Console.ForegroundColor = ConsoleColor.Black;
             }
-            Console.ForegroundColor = ConsoleColor.Black;
         }
     }
 }

@@ -26,10 +26,13 @@ namespace Snake
         //--------------------------------------------
         public void Draw()
         {
-            Console.ForegroundColor = ConsoleColor.Red;
-            Console.SetCursorPosition(this.X, this.Y);
-            Console.Write("");
-            Console.ForegroundColor = ConsoleColor.Black;
+            lock (Program.WriteLock)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.SetCursorPosition(this.X, this.Y);
+                Console.Write("");
+                Console.ForegroundColor = ConsoleColor.Black;
+            }
         }
     }
 }

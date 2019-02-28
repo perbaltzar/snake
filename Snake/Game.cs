@@ -9,6 +9,7 @@ namespace Snake
         // 
         //--------------------------------------------
         private Snake Snake { get; set; }
+        private Snake SnakePlayerTwo { get; set; }
         private Apple Apple { get; set; }
         private Food Food { get; set; }
         private Joystick Joystick { get; set; }
@@ -28,13 +29,14 @@ namespace Snake
         private bool IsFoodEaten { get; set; }
         private bool GameRunning { get; set; }
         private string Winner { get; set; }
-        private bool TwoPlayer { get; set; }
+        private GameMode GameMode { get; set; }
         private KeyDirection Direction { get; set; }
         private KeyDirection AppleDirection { get; set; }
         private KeyDirection SnakeDirection { get; set; }
+        private KeyDirection SnakeDirectionPlayerTwo { get; set; }
 
 
-        public Game(bool twoPlayerGame)
+        public Game(GameMode gameMode)
         {
             //--------------------------------------------
             //Setting the size of the board
@@ -48,6 +50,7 @@ namespace Snake
             this.Food = new Food(this.BoardWidth, this.BoardHeight);
             this.Joystick = new Joystick();
             this.Snake = new Snake(5, 10, 3);
+            this.SnakePlayerTwo = new Snake(5, 15, 3);
             this.Board = new Board(this.BoardWidth, this.BoardHeight);
             this.Apple = new Apple(this.BoardWidth, this.BoardHeight);
             this.Energybar = new Energy();
@@ -67,31 +70,39 @@ namespace Snake
             this.IsFoodEaten = false;
             this.Direction = KeyDirection.Right;
             this.GameRunning = true;
-            this.AppleDirection = KeyDirection.None;
+            if (gameMode == GameMode.SnakeVsApple)
+            {
+                this.AppleDirection = KeyDirection.None;
+            }
+            else
+            {
+                this.AppleDirection = KeyDirection.D;
+            }
             this.SnakeDirection = KeyDirection.Right;
-            this.TwoPlayer = twoPlayerGame;
+            this.SnakeDirectionPlayerTwo = KeyDirection.Right;
+            this.GameMode = gameMode;
 
 
         }
         public void Countdown ()
         {
-
             Console.Clear();
-            Snake.Draw();
+            Snake.Draw("Green");
             Food.Draw();
             Board.Draw();
             ShowLargeNumber(3, BoardWidth);
             Console.Clear();
-            Snake.Draw();
+            Snake.Draw("Green");
             Food.Draw();
             Board.Draw();
             ShowLargeNumber(2, BoardWidth);
             Console.Clear();
-            Snake.Draw();
+            Snake.Draw("Green");
             Food.Draw();
             Board.Draw();
             ShowLargeNumber(1, BoardWidth);
             Console.Clear();
+            Board.Draw();
         }
 
 
@@ -114,6 +125,11 @@ namespace Snake
                     this.Winner = "Apple";
                     break;
                 }
+
+                if (GameMode == GameMode.SnakeVsSnake)
+                {
+
+                }
                 //--------------------------------------------
                 // Getting movement direction
                 //--------------------------------------------
@@ -129,7 +145,7 @@ namespace Snake
                         AppleDirection = Direction;
                     }
                 }
-                if (TwoPlayer)
+                if (GameMode == GameMode.SnakeVsApple)
                 {
                     SnakeEnergy = Snake.GetEnergy();
                     IsFoodEaten = Snake.Eat(Apple);
@@ -141,20 +157,34 @@ namespace Snake
                 }
 
                 Apple.EraseOldApple();
-                Snake.Move(SnakeDirection, IsFoodEaten);
-                AppleDirection = Apple.Move(AppleDirection);
-               
+                if (GameMode == GameMode.SnakeVsApple)
+                {
+                    Snake.Move(SnakeDirection, IsFoodEaten);
+                    AppleDirection = Apple.Move(AppleDirection);
+                }
+                else if (GameMode == GameMode.SnakeVsSnake)
+                {
+                    SnakeDirectionPlayerTwo = SnakePlayerTwo.TranslateAppleDirectionToSnake(AppleDirection, SnakeDirectionPlayerTwo);
+                    Snake.Move(SnakeDirection, IsFoodEaten);
+                    SnakePlayerTwo.Move(SnakeDirectionPlayerTwo, IsFoodEaten);
+                }
+                else if (GameMode == GameMode.SinglePlayer)
+                {
+                    Snake.Move(SnakeDirection, IsFoodEaten);
+                }
+
+
+
 
                 if (IsFoodEaten)
                 {
                     Apple.LoseLife();
                     Score++;
-                    if (TwoPlayer)
+                    if (GameMode == GameMode.SnakeVsApple)
                     {
                         Apple.MakeFood(BoardWidth, BoardHeight);
                         Energy = Apple.GetEnergy();
                         Snake.GetEnergyFromApple(Energy);
-
                     }
                     else
                     {
@@ -166,20 +196,27 @@ namespace Snake
                 //--------------------------------------------
                 // Drawing the graphics in both modes
                 //--------------------------------------------
-                Snake.Draw();
-                Board.Draw();
+                Snake.Draw("Green");
+                
+
+
 
 
                 //--------------------------------------------
                 // Drawing different for Two vs One Player mode
                 //--------------------------------------------
-                if (TwoPlayer)
+                if (GameMode == GameMode.SnakeVsApple)
                 {
                     Apple.RottTheApple();
                     Energybar.Draw(BoardHeight, SnakeEnergy);
                     Snake.LoseEnergy();
                     Apple.Draw();
                     Apple.DrawLifes(BoardHeight);
+                }
+                else if (GameMode == GameMode.SnakeVsSnake)
+                {
+                    SnakePlayerTwo.Draw("Magenta");
+                    Food.Draw();
                 }
                 else
                 {
@@ -189,17 +226,13 @@ namespace Snake
 
 
 
-                if (SnakeEnergy < 1 && TwoPlayer)
+                if (SnakeEnergy < 1 && GameMode == GameMode.SnakeVsApple)
                 {
-                    // Show winning screen and ask if you want to play again
-                    // True resets the game, false go back to title screen
-                    // ShowWinner(Winner);
-                    // bool PlayAgain = PlayAgain();
                     this.GameRunning = false;
                     this.Winner = "Apple";
 
                 }
-                if (Apple.GetLifes() < 1 && TwoPlayer)
+                if (Apple.GetLifes() < 1 && GameMode == GameMode.SnakeVsApple)
                 {
                     this.GameRunning = false;
                     this.Winner = "Snake";
@@ -209,15 +242,18 @@ namespace Snake
                 // Timer for loop
                 //--------------------------------------------
                 Thread.Sleep(100 - Speed);
-
-                //Console.Clear();
-
             }
+
             Console.Clear();
             Console.ForegroundColor = ConsoleColor.White;
             GameOver(this.Winner);
-            Console.Clear();
+            bool playAgain = AskIfPlayAgain();
 
+            return playAgain;
+        }
+        public bool RunTwoPlayerSnake()
+
+        {
             return true;
         }
         static public void ShowScore(int score, int height)
@@ -230,83 +266,86 @@ namespace Snake
 
         static public void ShowLargeNumber(int number, int boardWidth)
         {
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            var cursorX = boardWidth / 2 - 7;
-            Console.SetCursorPosition(cursorX, 2);
-
-            switch (number)
+            lock (Program.WriteLock)
             {
-                case 1:
-                    Console.WriteLine("    ▄▄▄▄     ");
-                    Console.SetCursorPosition(cursorX, 3);
-                    Console.WriteLine("  ▄█░░░░▌    ");
-                    Console.SetCursorPosition(cursorX, 4);
-                    Console.WriteLine(" ▐░░▌▐░░▌    ");
-                    Console.SetCursorPosition(cursorX, 5);
-                    Console.WriteLine("  ▀▀ ▐░░▌    ");
-                    Console.SetCursorPosition(cursorX, 6);
-                    Console.WriteLine("     ▐░░▌    ");
-                    Console.SetCursorPosition(cursorX, 7);
-                    Console.WriteLine("     ▐░░▌    ");
-                    Console.SetCursorPosition(cursorX, 8);
-                    Console.WriteLine("     ▐░░▌    ");
-                    Console.SetCursorPosition(cursorX, 9);
-                    Console.WriteLine("     ▐░░▌    ");
-                    Console.SetCursorPosition(cursorX, 10);
-                    Console.WriteLine(" ▄▄▄▄█░░█▄▄▄ ");
-                    Console.SetCursorPosition(cursorX, 11);
-                    Console.WriteLine("▐░░░░░░░░░░░▌");
-                    Console.SetCursorPosition(cursorX, 12);
-                    Console.WriteLine(" ▀▀▀▀▀▀▀▀▀▀▀ ");
-                    break;
-                case 2:
-                    Console.WriteLine(" ▄▄▄▄▄▄▄▄▄▄▄ ");
-                    Console.SetCursorPosition(cursorX, 3);
-                    Console.WriteLine("▐░░░░░░░░░░░▌");
-                    Console.SetCursorPosition(cursorX, 4);
-                    Console.WriteLine(" ▀▀▀▀▀▀▀▀▀█░▌");
-                    Console.SetCursorPosition(cursorX, 5);
-                    Console.WriteLine("          ▐░▌");
-                    Console.SetCursorPosition(cursorX, 6);
-                    Console.WriteLine("          ▐░▌");
-                    Console.SetCursorPosition(cursorX, 7);
-                    Console.WriteLine(" ▄▄▄▄▄▄▄▄▄█░▌");
-                    Console.SetCursorPosition(cursorX, 8);
-                    Console.WriteLine("▐░░░░░░░░░░░▌");
-                    Console.SetCursorPosition(cursorX, 9);
-                    Console.WriteLine("▐░█▀▀▀▀▀▀▀▀▀ ");
-                    Console.SetCursorPosition(cursorX, 10);
-                    Console.WriteLine("▐░█▄▄▄▄▄▄▄▄▄ ");
-                    Console.SetCursorPosition(cursorX, 11);
-                    Console.WriteLine("▐░░░░░░░░░░░▌");
-                    Console.SetCursorPosition(cursorX, 12);
-                    Console.WriteLine(" ▀▀▀▀▀▀▀▀▀▀▀ ");
-                    break;
-                case 3:
-                    Console.WriteLine(" ▄▄▄▄▄▄▄▄▄▄▄ ");
-                    Console.SetCursorPosition(cursorX, 3);
-                    Console.WriteLine("▐░░░░░░░░░░░▌");
-                    Console.SetCursorPosition(cursorX, 4);
-                    Console.WriteLine(" ▀▀▀▀▀▀▀▀▀█░▌");
-                    Console.SetCursorPosition(cursorX, 5);
-                    Console.WriteLine("          ▐░▌");
-                    Console.SetCursorPosition(cursorX, 6);
-                    Console.WriteLine(" ▄▄▄▄▄▄▄▄▄█░▌");
-                    Console.SetCursorPosition(cursorX, 7);
-                    Console.WriteLine("▐░░░░░░░░░░░▌");
-                    Console.SetCursorPosition(cursorX, 8);
-                    Console.WriteLine(" ▀▀▀▀▀▀▀▀▀█░▌");
-                    Console.SetCursorPosition(cursorX, 9);
-                    Console.WriteLine("          ▐░▌");
-                    Console.SetCursorPosition(cursorX, 10);
-                    Console.WriteLine(" ▄▄▄▄▄▄▄▄▄█░▌");
-                    Console.SetCursorPosition(cursorX, 11);
-                    Console.WriteLine("▐░░░░░░░░░░░▌");
-                    Console.SetCursorPosition(cursorX, 12);
-                    Console.WriteLine(" ▀▀▀▀▀▀▀▀▀▀▀ ");
-                    break;
+                Console.ForegroundColor = ConsoleColor.Yellow;
+                var cursorX = boardWidth / 2 - 7;
+                Console.SetCursorPosition(cursorX, 2);
+
+                switch (number)
+                {
+                    case 1:
+                        Console.WriteLine("    ▄▄▄▄     ");
+                        Console.SetCursorPosition(cursorX, 3);
+                        Console.WriteLine("  ▄█░░░░▌    ");
+                        Console.SetCursorPosition(cursorX, 4);
+                        Console.WriteLine(" ▐░░▌▐░░▌    ");
+                        Console.SetCursorPosition(cursorX, 5);
+                        Console.WriteLine("  ▀▀ ▐░░▌    ");
+                        Console.SetCursorPosition(cursorX, 6);
+                        Console.WriteLine("     ▐░░▌    ");
+                        Console.SetCursorPosition(cursorX, 7);
+                        Console.WriteLine("     ▐░░▌    ");
+                        Console.SetCursorPosition(cursorX, 8);
+                        Console.WriteLine("     ▐░░▌    ");
+                        Console.SetCursorPosition(cursorX, 9);
+                        Console.WriteLine("     ▐░░▌    ");
+                        Console.SetCursorPosition(cursorX, 10);
+                        Console.WriteLine(" ▄▄▄▄█░░█▄▄▄ ");
+                        Console.SetCursorPosition(cursorX, 11);
+                        Console.WriteLine("▐░░░░░░░░░░░▌");
+                        Console.SetCursorPosition(cursorX, 12);
+                        Console.WriteLine(" ▀▀▀▀▀▀▀▀▀▀▀ ");
+                        break;
+                    case 2:
+                        Console.WriteLine(" ▄▄▄▄▄▄▄▄▄▄▄ ");
+                        Console.SetCursorPosition(cursorX, 3);
+                        Console.WriteLine("▐░░░░░░░░░░░▌");
+                        Console.SetCursorPosition(cursorX, 4);
+                        Console.WriteLine(" ▀▀▀▀▀▀▀▀▀█░▌");
+                        Console.SetCursorPosition(cursorX, 5);
+                        Console.WriteLine("          ▐░▌");
+                        Console.SetCursorPosition(cursorX, 6);
+                        Console.WriteLine("          ▐░▌");
+                        Console.SetCursorPosition(cursorX, 7);
+                        Console.WriteLine(" ▄▄▄▄▄▄▄▄▄█░▌");
+                        Console.SetCursorPosition(cursorX, 8);
+                        Console.WriteLine("▐░░░░░░░░░░░▌");
+                        Console.SetCursorPosition(cursorX, 9);
+                        Console.WriteLine("▐░█▀▀▀▀▀▀▀▀▀ ");
+                        Console.SetCursorPosition(cursorX, 10);
+                        Console.WriteLine("▐░█▄▄▄▄▄▄▄▄▄ ");
+                        Console.SetCursorPosition(cursorX, 11);
+                        Console.WriteLine("▐░░░░░░░░░░░▌");
+                        Console.SetCursorPosition(cursorX, 12);
+                        Console.WriteLine(" ▀▀▀▀▀▀▀▀▀▀▀ ");
+                        break;
+                    case 3:
+                        Console.WriteLine(" ▄▄▄▄▄▄▄▄▄▄▄ ");
+                        Console.SetCursorPosition(cursorX, 3);
+                        Console.WriteLine("▐░░░░░░░░░░░▌");
+                        Console.SetCursorPosition(cursorX, 4);
+                        Console.WriteLine(" ▀▀▀▀▀▀▀▀▀█░▌");
+                        Console.SetCursorPosition(cursorX, 5);
+                        Console.WriteLine("          ▐░▌");
+                        Console.SetCursorPosition(cursorX, 6);
+                        Console.WriteLine(" ▄▄▄▄▄▄▄▄▄█░▌");
+                        Console.SetCursorPosition(cursorX, 7);
+                        Console.WriteLine("▐░░░░░░░░░░░▌");
+                        Console.SetCursorPosition(cursorX, 8);
+                        Console.WriteLine(" ▀▀▀▀▀▀▀▀▀█░▌");
+                        Console.SetCursorPosition(cursorX, 9);
+                        Console.WriteLine("          ▐░▌");
+                        Console.SetCursorPosition(cursorX, 10);
+                        Console.WriteLine(" ▄▄▄▄▄▄▄▄▄█░▌");
+                        Console.SetCursorPosition(cursorX, 11);
+                        Console.WriteLine("▐░░░░░░░░░░░▌");
+                        Console.SetCursorPosition(cursorX, 12);
+                        Console.WriteLine(" ▀▀▀▀▀▀▀▀▀▀▀ ");
+                        break;
+                }
+                Thread.Sleep(1000);
             }
-            Thread.Sleep(1000);
         }
         public void GameOver(string winner)
         {
@@ -318,17 +357,25 @@ namespace Snake
             Console.WriteLine("╚██████╔╝██║  ██║██║ ╚═╝ ██║███████╗    ╚██████╔╝ ╚████╔╝ ███████╗██║  ██║");
             Console.WriteLine(" ╚═════╝ ╚═╝  ╚═╝╚═╝     ╚═╝╚══════╝     ╚═════╝   ╚═══╝  ╚══════╝╚═╝  ╚═╝");
             Console.WriteLine("");
-            Console.SetCursorPosition(24, 7);
+            Console.SetCursorPosition(26, 8);
             Console.WriteLine($"{winner} has won the game!");
             Console.WriteLine("");
-            Console.SetCursorPosition(24, 11);
-            Console.WriteLine("Press Enter to continue!");
+        }
+        public bool AskIfPlayAgain() 
+        {
+            Console.SetCursorPosition(18, 11);
+            Console.WriteLine("Press Enter to play again, ESC to exit!");
             while (true)
             {
                 var key = Console.ReadKey().Key;
                 if (key == ConsoleKey.Enter)
                 {
-                    break;
+                    return true;
+                }
+                if (key == ConsoleKey.Escape)
+                {
+                    Console.Clear();
+                    return false;
                 }
             }
         }

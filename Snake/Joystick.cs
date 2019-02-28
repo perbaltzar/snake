@@ -12,7 +12,7 @@ namespace Snake
         public KeyDirection SetKeyDirection(KeyDirection PreviousDirection)
         {
 
-            var direction = Console.ReadKey().Key;
+            var direction = Console.ReadKey(true).Key;
 
             Thread.Sleep(10);
 

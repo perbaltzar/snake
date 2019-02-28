@@ -21,7 +21,7 @@ namespace Snake
             this.Tail = new List<Point>();
             this.Energy = 150;
 
-            for (var i = 1; i <= lenght; i++)
+            for (var i = lenght; i >= 1; i--)
             {
                 this.Tail.Add(new Point(this.X-i, this.Y));
             }
@@ -61,18 +61,37 @@ namespace Snake
         //--------------------------------------------
         // Drawing the Snake graphics
         //--------------------------------------------
-        public void Draw()
+        public void Draw(string color)
         {
-            Console.BackgroundColor = ConsoleColor.Green;
-            foreach (var tailposition in this.Tail)
+            lock (Program.WriteLock)
             {
-                Console.SetCursorPosition(tailposition.X, tailposition.Y);
+                if (color == "Green")
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkGreen;
+                }
+                else if (color == "Magenta")
+                {
+                    Console.BackgroundColor = ConsoleColor.DarkMagenta;
+                }
+                foreach (var tailposition in this.Tail)
+                {
+
+                    Console.SetCursorPosition(tailposition.X, tailposition.Y);
+                    Console.Write(" ");
+                }
+                if (color == "Green")
+                {
+                    Console.BackgroundColor = ConsoleColor.Green;
+                }
+                else if (color == "Magenta")
+                {
+                    Console.BackgroundColor = ConsoleColor.Magenta;
+                }
+                Console.SetCursorPosition(this.X, this.Y);
                 Console.Write(" ");
+                Console.BackgroundColor = ConsoleColor.Black;
             }
 
-            Console.SetCursorPosition(this.X, this.Y);
-            Console.Write(" ");
-            Console.BackgroundColor = ConsoleColor.Black;
         }
 
         //--------------------------------------------
@@ -144,6 +163,37 @@ namespace Snake
         public int GetEnergy()
         {
             return this.Energy;
+        }
+        public KeyDirection TranslateAppleDirectionToSnake(KeyDirection direction, KeyDirection previousDirection)
+        {
+            switch (direction)
+            {
+                case KeyDirection.W:
+                    if (previousDirection != KeyDirection.Left)
+                    {
+                        return KeyDirection.Up;
+                    }
+                    break;
+                case KeyDirection.S:
+                    if (previousDirection != KeyDirection.Up)
+                    {
+                        return KeyDirection.Down;
+                    }
+                    break;
+                case KeyDirection.A:
+                    if (previousDirection != KeyDirection.Right)
+                    {
+                        return KeyDirection.Left;
+                    }
+                    break;
+                case KeyDirection.D:
+                    if (previousDirection != KeyDirection.Left)
+                    {
+                        return KeyDirection.Right;
+                    }
+                    break;
+            }
+            return previousDirection;
         }
     }
 }
