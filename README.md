@@ -8,7 +8,10 @@ Clone or download the repo using this [link](https://github.com/perbaltzar/snake
 Open in any C# software, I use Visual Studio. 
 
 ### TO DO
-* Add a Game Over screen
+* Show score in Snake vs Snake
+* Collision test with other snake in Snake vs Snake
+* Solve the issue with controls in Snake vs Snake
+* Chose Back option in menu
 
 ### CO-CREATORS
 * [Isac Larsson](https://github.com/WebDevIsac)

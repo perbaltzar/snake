@@ -25,8 +25,12 @@ namespace Snake
 
 
         private int Score { get; set; }
+        private int TwoPlayerScore { get; set; }
         private int Speed { get; }
         private bool IsFoodEaten { get; set; }
+
+        private bool OnePlayerFoodIsEaten { get; set; }
+        private bool TwoPlayerFoodIsEaten { get; set; }
         private bool GameRunning { get; set; }
         private string Winner { get; set; }
         private GameMode GameMode { get; set; }
@@ -66,6 +70,7 @@ namespace Snake
             // Setting startvariables
             //--------------------------------------------
             this.Score = 0;
+            this.TwoPlayerScore = 0;
             this.Speed = 5;
             this.IsFoodEaten = false;
             this.Direction = KeyDirection.Right;
@@ -81,6 +86,8 @@ namespace Snake
             this.SnakeDirection = KeyDirection.Right;
             this.SnakeDirectionPlayerTwo = KeyDirection.Right;
             this.GameMode = gameMode;
+            this.OnePlayerFoodIsEaten = false;
+            this.TwoPlayerFoodIsEaten = false;
 
 
         }
@@ -128,7 +135,18 @@ namespace Snake
 
                 if (GameMode == GameMode.SnakeVsSnake)
                 {
-
+                    if (SnakePlayerTwo.CheckBoardCollision(Board))
+                    {
+                        GameRunning = false;
+                        this.Winner = "Player 1";
+                        break;
+                    }
+                    if (SnakePlayerTwo.CheckTailCollision())
+                    {
+                        GameRunning = false;
+                        this.Winner = "Player 1";
+                        break;
+                    }
                 }
                 //--------------------------------------------
                 // Getting movement direction
@@ -145,15 +163,37 @@ namespace Snake
                         AppleDirection = Direction;
                     }
                 }
+
+                //--------------------------------------------
+                // Getting movement direction
+                //--------------------------------------------
                 if (GameMode == GameMode.SnakeVsApple)
                 {
                     SnakeEnergy = Snake.GetEnergy();
                     IsFoodEaten = Snake.Eat(Apple);
 
                 }
-                else
+                else if (GameMode == GameMode.SinglePlayer)
                 {
                     IsFoodEaten = Snake.Eat(Food);
+                }
+                else if (GameMode == GameMode.SnakeVsSnake)
+                {
+
+                    OnePlayerFoodIsEaten = Snake.Eat(Food);
+                    TwoPlayerFoodIsEaten = SnakePlayerTwo.Eat(Food);
+                    if (OnePlayerFoodIsEaten)
+                    {
+                        Score++;
+                        IsFoodEaten = true;                    
+                    }
+                    if (TwoPlayerFoodIsEaten)
+                    {
+                        TwoPlayerScore++;
+                        IsFoodEaten = true;
+
+                    }
+
                 }
 
                 Apple.EraseOldApple();
@@ -165,8 +205,8 @@ namespace Snake
                 else if (GameMode == GameMode.SnakeVsSnake)
                 {
                     SnakeDirectionPlayerTwo = SnakePlayerTwo.TranslateAppleDirectionToSnake(AppleDirection, SnakeDirectionPlayerTwo);
-                    Snake.Move(SnakeDirection, IsFoodEaten);
-                    SnakePlayerTwo.Move(SnakeDirectionPlayerTwo, IsFoodEaten);
+                    Snake.Move(SnakeDirection, OnePlayerFoodIsEaten);
+                    SnakePlayerTwo.Move(SnakeDirectionPlayerTwo, TwoPlayerFoodIsEaten);
                 }
                 else if (GameMode == GameMode.SinglePlayer)
                 {
@@ -178,16 +218,22 @@ namespace Snake
 
                 if (IsFoodEaten)
                 {
-                    Apple.LoseLife();
-                    Score++;
+
                     if (GameMode == GameMode.SnakeVsApple)
                     {
+                        Apple.LoseLife();
                         Apple.MakeFood(BoardWidth, BoardHeight);
                         Energy = Apple.GetEnergy();
                         Snake.GetEnergyFromApple(Energy);
                     }
+                    else if (GameMode == GameMode.SnakeVsSnake)
+                    {
+                        Food.MakeFood(BoardWidth, BoardHeight);
+                        IsFoodEaten = false;
+                    }
                     else
                     {
+                        Score++;
                         Food.MakeFood(BoardWidth, BoardHeight);
                     }
 
