@@ -9,7 +9,7 @@ namespace Snake
         private int Rotten { get; set; }
         private int MaxWidth { get; }
         private int MaxHeight { get; }
-        private int Lifes { get; set; } = 20;
+        private int Lifes { get; set; } = 3;
 
         public Apple(int width, int height) : base(width, height)
         {
@@ -86,6 +86,9 @@ namespace Snake
         {
             var energyLeft = 90 - Rotten;
             this.Rotten = 0;
+            if (energyLeft < 30){
+                return 30;
+            }
             return energyLeft;
 
         }

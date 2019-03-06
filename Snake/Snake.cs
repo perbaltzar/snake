@@ -127,6 +127,14 @@ namespace Snake
         }
 
         //--------------------------------------------
+        // Check if Snake hits other Snake
+        //--------------------------------------------
+        public bool CheckSnakeCollision(Snake snake)
+        {
+            return (snake.Tail.Any(k => k.X == this.X && k.Y == this.Y));
+        }
+
+        //--------------------------------------------
         // Check collision with food
         //--------------------------------------------
         public bool Eat(Food food)
@@ -158,18 +166,22 @@ namespace Snake
             }
         }
         //--------------------------------------------
-        // Return the energy value in two player mode
+        // Return the energy value in Apple vs Snake
         //--------------------------------------------
         public int GetEnergy()
         {
             return this.Energy;
         }
+
+        //--------------------------------------------
+        // Translate keys A,W,S,D to Up, Down, Left, Right
+        //--------------------------------------------
         public KeyDirection TranslateAppleDirectionToSnake(KeyDirection direction, KeyDirection previousDirection)
         {
             switch (direction)
             {
                 case KeyDirection.W:
-                    if (previousDirection != KeyDirection.Left)
+                    if (previousDirection != KeyDirection.Down)
                     {
                         return KeyDirection.Up;
                     }

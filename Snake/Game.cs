@@ -117,24 +117,45 @@ namespace Snake
         {
             while (GameRunning)
             {
+                if (GameMode == GameMode.SinglePlayer)
+                {
+                    if (Snake.CheckBoardCollision(Board))
+                    {
+                        GameRunning = false;
+                        this.Winner = "Someone Else";
+                        break;
+                    }
+                    if (Snake.CheckTailCollision())
+                    {
+                        GameRunning = false;
+                        this.Winner = "Someone Else";
+                        break;
+                    }
+                }
                 //--------------------------------------------
                 // Check for collision with tail and board
                 //--------------------------------------------
-                if (Snake.CheckBoardCollision(Board))
+                if (GameMode == GameMode.SnakeVsApple)
                 {
-                    GameRunning = false;
-                    this.Winner = "Apple";
-                    break;
-                }
-                if (Snake.CheckTailCollision())
-                {
-                    GameRunning = false;
-                    this.Winner = "Apple";
-                    break;
-                }
+                    if (Snake.CheckBoardCollision(Board))
+                    {
+                        GameRunning = false;
+                        this.Winner = "Apple";
+                        break;
+                    }
+                    if (Snake.CheckTailCollision())
+                    {
+                        GameRunning = false;
+                        this.Winner = "Apple";
+                        break;
+                    }
 
-                if (GameMode == GameMode.SnakeVsSnake)
+                }
+                else if (GameMode == GameMode.SnakeVsSnake)
                 {
+                    //--------------------------------------------
+                    // Check for collision on Snake Player Two
+                    //--------------------------------------------
                     if (SnakePlayerTwo.CheckBoardCollision(Board))
                     {
                         GameRunning = false;
@@ -147,7 +168,26 @@ namespace Snake
                         this.Winner = "Player 1";
                         break;
                     }
+                    if (SnakePlayerTwo.CheckSnakeCollision(Snake))
+                    {
+                        GameRunning = false;
+                        this.Winner = "Player 1";
+                        break;
+                    }
+                    //--------------------------------------------
+                    // Check for collision with other Snake
+                    //--------------------------------------------
+                    //if (Snake.CheckSnakeCollision(SnakePlayerTwo))
+                    //{
+                    //    GameRunning = false;
+                    //    this.Winner = "Player 2";
+                    //    break;
+                    //}
                 }
+
+
+
+
                 //--------------------------------------------
                 // Getting movement direction
                 //--------------------------------------------
@@ -165,7 +205,7 @@ namespace Snake
                 }
 
                 //--------------------------------------------
-                // Getting movement direction
+                // Eating of the apple
                 //--------------------------------------------
                 if (GameMode == GameMode.SnakeVsApple)
                 {
@@ -191,7 +231,6 @@ namespace Snake
                     {
                         TwoPlayerScore++;
                         IsFoodEaten = true;
-
                     }
 
                 }
