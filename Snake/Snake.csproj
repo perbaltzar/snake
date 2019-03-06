@@ -10,5 +10,6 @@
     <Compile Remove="TailPosition.cs" />
     <Compile Remove="AppleKeyDirection.cs" />
     <Compile Remove="StartScreen.cs" />
+    <Compile Remove="Ship.cs" />
   </ItemGroup>
 </Project>
